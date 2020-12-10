@@ -1,22 +1,21 @@
 #include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-#include <glm/glm.hpp>
-#include <imgui/imgui.h>
-#include <sol/sol.hpp>
+#include "Constants.h"
+#include "Game.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
+    Game* game = new Game;
 
-    sol::state lua;
+    game->Initalise(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    lua.open_libraries(sol::lib::base);
+    while (game->IsRunning())
+    {
+        game->ProcessInput();
+        game->Update();
+        game->Render();
+    }
 
-    glm::vec2 velocity = glm::vec2(2.0, -1.0);
-
-    SDL_Init(SDL_INIT_EVERYTHING);
-
-    std::cout << "Hello, world!" << std::endl;
+    game->Destroy();
+   
     return 0;
 }
