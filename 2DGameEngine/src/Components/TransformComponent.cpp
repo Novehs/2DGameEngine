@@ -1,5 +1,4 @@
 #include "TransformComponent.h"
-#include <SDL.h>
 #include "../Game.h"
 
 TransformComponent::TransformComponent(int posX, int posY, int velX, int velY, int w, int h, int s)
@@ -25,8 +24,4 @@ void TransformComponent::Update(float deltaTime)
 void TransformComponent::Render()
 {
 
-	SDL_Rect transformRectangle{ (int)position.x, (int)position.y, width, height };
-
-	SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 255);
-	SDL_RenderFillRect(Game::renderer, &transformRectangle);
 }
