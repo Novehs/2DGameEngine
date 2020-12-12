@@ -33,3 +33,9 @@ bool Entity::IsActive() const
 {
 	return this->isActive;
 }
+
+void Entity::ListAllComponents() const
+{
+	for (auto& element : componentType)
+		std::cout << "Component <" << element.first->name() << ">\n";
+}

@@ -3,10 +3,13 @@
 #include <glm/glm.hpp>
 #include "Constants.h"
 #include "EntityManager.h"
+#include "AssetManager.h"
 #include "Entity.h"
 #include "Components/TransformComponent.h"
+#include "Components/SpriteComponent.h"
 
 EntityManager manager;
+AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
 
 Game::Game() : window(nullptr), isRunning(false), ticksLastFrame(0)
@@ -26,12 +29,23 @@ bool Game::IsRunning() const
 
 void Game::LoadLevel(int levelNumber)
 {
-	Entity& projectile(manager.AddEntity("projectile"));
+	assetManager->AddTexture("tank_right", "./assets/images/tank-tiger-right.png");
+	assetManager->AddTexture("chopper", "./assets/images/chopper-spritesheet.png");
+	assetManager->AddTexture("radar", "./assets/images/radar-spritesheet.png");
 
-	projectile.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
 
-	Entity& projectile2(manager.AddEntity("projectile2"));
-	projectile2.AddComponent<TransformComponent>(400, 0, 0, 100, 50, 50, 1);
+	Entity& Tank(manager.AddEntity("tank"));	//call copy constructor
+	Tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+	Tank.AddComponent<SpriteComponent>("tank_right");
+
+	Entity& Chopper(manager.AddEntity("chopper"));
+	Chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+	Chopper.AddComponent<SpriteComponent>("chopper", 2, 90, true, false);
+
+	Entity& Radar(manager.AddEntity("radar"));
+	Radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+	Radar.AddComponent<SpriteComponent>("radar", 8, 150, false, true);
+
 }
 
 void Game::Initalise(int width, int height)
@@ -60,7 +74,8 @@ void Game::Initalise(int width, int height)
 
 	LoadLevel(0);
 
-	
+	manager.ListAllEntities();
+
 
 	isRunning = true;
 
@@ -105,7 +120,8 @@ void Game::Update()
 	//set ticks of current frame for next pass
 	ticksLastFrame = SDL_GetTicks();
 
-	manager.Update(deltaTime);
+	if(manager.HasEntites())
+		manager.Update(deltaTime);
 }
 
 void Game::Render()
@@ -117,10 +133,8 @@ void Game::Render()
 	SDL_RenderClear(renderer);
 
 	//Call manager.render
-	if (manager.hasNoEntites())
-		return;
-
-	manager.Render();
+	if (manager.HasEntites())
+		manager.Render();
 
 	//swap front and back buffers
 	SDL_RenderPresent(renderer);

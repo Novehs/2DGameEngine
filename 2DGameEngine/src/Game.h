@@ -3,6 +3,8 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
+class AssetManager;
+
 class Game
 {
 private:
@@ -12,6 +14,7 @@ private:
 
 public:
 	static SDL_Renderer* renderer;
+	static AssetManager* assetManager;
 	Game();
 	~Game();
 	bool IsRunning() const;

@@ -13,9 +13,11 @@ public:
 	void ClearData();
 	void Update(float deltaTime);
 	void Render();
-	bool hasNoEntites() const;
+	bool HasEntites() const;
 	Entity& AddEntity(std::string entity);
 	std::vector<Entity*> getEntities() const;
 	unsigned int getEntityCount();
+
+	void ListAllEntities() const;
 };
 

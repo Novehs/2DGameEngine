@@ -6,13 +6,13 @@
 class TransformComponent : public Component
 {
 private:
+
+public:
 	glm::vec2 position;
 	glm::vec2 velocity;
 	int width;
 	int height;
 	int scale;
-
-public:
 
 	TransformComponent(int posX, int posY, int velX, int velY, int w, int h, int s);
 

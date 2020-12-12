@@ -20,9 +20,9 @@ void EntityManager::Render()
         entity->Render();
 }
 
-bool EntityManager::hasNoEntites() const
+bool EntityManager::HasEntites() const
 {
-    return entities.size() == 0;
+    return entities.size() != 0;
 }
 
 Entity& EntityManager::AddEntity(std::string entityName)
@@ -41,4 +41,13 @@ std::vector<Entity*> EntityManager::getEntities() const
 unsigned int EntityManager::getEntityCount()
 {
     return entities.size();
+}
+
+void EntityManager::ListAllEntities() const
+{
+    for (auto& entity : entities)
+    {
+        std::cout << "Entity: " << entity->name << '\n';
+        entity->ListAllComponents();
+    }
 }
