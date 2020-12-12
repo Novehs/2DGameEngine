@@ -7,10 +7,12 @@
 #include "Entity.h"
 #include "Components/TransformComponent.h"
 #include "Components/SpriteComponent.h"
+#include "Components/KeyboardControlComponent.h";
 
 EntityManager manager;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
+SDL_Event Game::event;
 
 Game::Game() : window(nullptr), isRunning(false), ticksLastFrame(0)
 {
@@ -33,14 +35,15 @@ void Game::LoadLevel(int levelNumber)
 	assetManager->AddTexture("chopper", "./assets/images/chopper-spritesheet.png");
 	assetManager->AddTexture("radar", "./assets/images/radar-spritesheet.png");
 
+	Entity& Chopper(manager.AddEntity("chopper"));
+	Chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+	Chopper.AddComponent<SpriteComponent>("chopper", 2, 90, true, false);
+	Chopper.AddComponent< KeyboardControlComponent>("w", "d", "s", "a","space");
 
 	Entity& Tank(manager.AddEntity("tank"));	//call copy constructor
 	Tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
 	Tank.AddComponent<SpriteComponent>("tank_right");
 
-	Entity& Chopper(manager.AddEntity("chopper"));
-	Chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-	Chopper.AddComponent<SpriteComponent>("chopper", 2, 90, true, false);
 
 	Entity& Radar(manager.AddEntity("radar"));
 	Radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
@@ -83,7 +86,7 @@ void Game::Initalise(int width, int height)
 
 void Game::ProcessInput()
 {
-	SDL_Event event;
+	
 	SDL_PollEvent(&event);
 
 	switch (event.type)

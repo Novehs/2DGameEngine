@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\KeyboardControlComponent.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\AssetManager.h" />
@@ -555,6 +556,7 @@
     <None Include="libs\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\KeyboardControlComponent.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />

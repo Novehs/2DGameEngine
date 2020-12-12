@@ -20,10 +20,10 @@ SpriteComponent::SpriteComponent(std::string textureID, int numFrames, int anima
 
 	if (hasDirection)
 	{
-		Animation Down = Animation(0, numFrames, animationSpeed);
+		Animation Down = Animation(2, numFrames, animationSpeed);
 		Animation Right = Animation(1, numFrames, animationSpeed);
-		Animation Left = Animation(2, numFrames, animationSpeed);
-		Animation Up = Animation(3, numFrames, animationSpeed);
+		Animation Left = Animation(3, numFrames, animationSpeed);
+		Animation Up = Animation(0, numFrames, animationSpeed);
 
 		animations.emplace("Down", Down);
 		animations.emplace("Right", Right);
