@@ -4,7 +4,7 @@
 #include <SDL_ttf.h>
 
 class AssetManager;
-
+class Map;
 class Game
 {
 private:
@@ -16,6 +16,7 @@ public:
 	static SDL_Renderer* renderer;
 	static AssetManager* assetManager;
 	static SDL_Event event;
+	Map* map;
 	Game();
 	~Game();
 	bool IsRunning() const;

@@ -8,13 +8,13 @@
 #include "Components/TransformComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Components/KeyboardControlComponent.h";
-
+#include "Map.h"
 EntityManager manager;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
 SDL_Event Game::event;
 
-Game::Game() : window(nullptr), isRunning(false), ticksLastFrame(0)
+Game::Game() : window(nullptr), isRunning(false), ticksLastFrame(0), map(nullptr)
 {
 	
 }
@@ -34,11 +34,15 @@ void Game::LoadLevel(int levelNumber)
 	assetManager->AddTexture("tank_right", "./assets/images/tank-tiger-right.png");
 	assetManager->AddTexture("chopper", "./assets/images/chopper-spritesheet.png");
 	assetManager->AddTexture("radar", "./assets/images/radar-spritesheet.png");
+	assetManager->AddTexture("jungle", "./assets/tilemaps/jungle.png");
+	
+	map = new Map("jungle", 1, 32);
+	map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
 	Entity& Chopper(manager.AddEntity("chopper"));
 	Chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
 	Chopper.AddComponent<SpriteComponent>("chopper", 2, 90, true, false);
-	Chopper.AddComponent< KeyboardControlComponent>("w", "d", "s", "a","space");
+	Chopper.AddComponent<KeyboardControlComponent>("w", "d", "s", "a","space");
 
 	Entity& Tank(manager.AddEntity("tank"));	//call copy constructor
 	Tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
