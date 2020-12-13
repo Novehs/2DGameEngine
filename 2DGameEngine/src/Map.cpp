@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "EntityManager.h"
 #include "Components/TileComponent.h"
+#include "Constants.h"
 #include <fstream>
 
 extern EntityManager manager;
@@ -49,6 +50,6 @@ void Map::LoadMap(std::string filepath, int mapSizeX, int mapSizeY)
 
 void Map::AddTile(int sourceX, int sourceY, int x, int y)
 {
-	Entity& Tile(manager.AddEntity("tile"));
+	Entity& Tile(manager.AddEntity("tile", TILEMAP_LAYER));
 	Tile.AddComponent<TileComponent>(sourceX, sourceY, x, y, tileSize, scale, textureID);
 }

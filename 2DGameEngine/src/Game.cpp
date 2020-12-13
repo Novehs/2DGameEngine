@@ -9,6 +9,7 @@
 #include "Components/SpriteComponent.h"
 #include "Components/KeyboardControlComponent.h";
 #include "Map.h"
+
 EntityManager manager;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
@@ -39,17 +40,17 @@ void Game::LoadLevel(int levelNumber)
 	map = new Map("jungle", 1, 32);
 	map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
-	Entity& Chopper(manager.AddEntity("chopper"));
+	Entity& Chopper(manager.AddEntity("chopper", PLAYER_LAYER));
 	Chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
 	Chopper.AddComponent<SpriteComponent>("chopper", 2, 90, true, false);
 	Chopper.AddComponent<KeyboardControlComponent>("w", "d", "s", "a","space");
 
-	Entity& Tank(manager.AddEntity("tank"));	//call copy constructor
+	Entity& Tank(manager.AddEntity("tank", ENEMY_LAYER));	//call copy constructor
 	Tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
 	Tank.AddComponent<SpriteComponent>("tank_right");
 
 
-	Entity& Radar(manager.AddEntity("radar"));
+	Entity& Radar(manager.AddEntity("radar", UI_LAYER));
 	Radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
 	Radar.AddComponent<SpriteComponent>("radar", 8, 150, false, true);
 
