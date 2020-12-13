@@ -14,6 +14,7 @@ EntityManager manager;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
 SDL_Event Game::event;
+SDL_Rect Game::camera = { 0,0, WINDOW_WIDTH, WINDOW_HEIGHT };
 
 Game::Game() : window(nullptr), isRunning(false), ticksLastFrame(0), map(nullptr)
 {
@@ -30,6 +31,8 @@ bool Game::IsRunning() const
 	return isRunning;
 }
 
+
+
 void Game::LoadLevel(int levelNumber)
 {
 	assetManager->AddTexture("tank_right", "./assets/images/tank-tiger-right.png");
@@ -37,20 +40,19 @@ void Game::LoadLevel(int levelNumber)
 	assetManager->AddTexture("radar", "./assets/images/radar-spritesheet.png");
 	assetManager->AddTexture("jungle", "./assets/tilemaps/jungle.png");
 	
-	map = new Map("jungle", 1, 32);
+	map = new Map("jungle", 2, 32);
 	map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
-	Entity& Chopper(manager.AddEntity("chopper", PLAYER_LAYER));
-	Chopper.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-	Chopper.AddComponent<SpriteComponent>("chopper", 2, 90, true, false);
-	Chopper.AddComponent<KeyboardControlComponent>("w", "d", "s", "a","space");
+	Entity& Player(manager.AddEntity("player", LayerType::PLAYER_LAYER));
+	Player.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+	Player.AddComponent<SpriteComponent>("chopper", 2, 90, true, false);
+	Player.AddComponent<KeyboardControlComponent>("w", "d", "s", "a","space");
 
-	Entity& Tank(manager.AddEntity("tank", ENEMY_LAYER));	//call copy constructor
-	Tank.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+	Entity& Tank(manager.AddEntity("tank", LayerType::ENEMY_LAYER));	//call copy constructor
+	Tank.AddComponent<TransformComponent>(150, 235, 5, 0, 32, 32, 1);
 	Tank.AddComponent<SpriteComponent>("tank_right");
 
-
-	Entity& Radar(manager.AddEntity("radar", UI_LAYER));
+	Entity& Radar(manager.AddEntity("radar", LayerType::UI_LAYER));
 	Radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
 	Radar.AddComponent<SpriteComponent>("radar", 8, 150, false, true);
 
@@ -81,9 +83,6 @@ void Game::Initalise(int width, int height)
 	}
 
 	LoadLevel(0);
-
-	manager.ListAllEntities();
-
 
 	isRunning = true;
 
@@ -130,6 +129,8 @@ void Game::Update()
 
 	if(manager.HasEntites())
 		manager.Update(deltaTime);
+
+	HandleCameraMovement();
 }
 
 void Game::Render()
@@ -154,4 +155,34 @@ void Game::Destroy()
 	SDL_DestroyWindow(window);
 	manager.ClearData();
 	SDL_Quit();
+}
+
+void Game::HandleCameraMovement()
+{
+	TransformComponent* playerTransform;
+
+	auto it = manager.getEntitiesByLayer(LayerType::PLAYER_LAYER);
+
+	for (auto& entity : it)
+	{
+		if (entity->name == "player")
+		{
+			playerTransform = entity->GetComponent<TransformComponent>();
+			camera.x = playerTransform->position.x - (WINDOW_WIDTH / 2);
+			camera.y = playerTransform->position.y - (WINDOW_HEIGHT / 2);
+
+		}
+		else
+		{
+			std::cerr << "failed to find player\n";
+		}
+	}
+	
+	camera.x = camera.x < 0 ? 0 : camera.x;
+	camera.y = camera.y < 0 ? 0 : camera.y;
+
+	camera.x = camera.x > camera.w ? camera.w : camera.x;
+	camera.y = camera.y > camera.h ? camera.h : camera.y;
+
+
 }

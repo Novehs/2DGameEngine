@@ -7,7 +7,7 @@
 
 class EntityManager;
 class Component;
-enum LayerType;
+enum class LayerType;
 class Entity
 {
 private:

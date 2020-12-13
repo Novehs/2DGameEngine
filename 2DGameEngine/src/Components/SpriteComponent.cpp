@@ -78,8 +78,8 @@ void SpriteComponent::Update(float deltaTime)
 	//move sprite sheet source down by height amount
 	source.y = animationIndex * transform->height;
 
-	dest.x = static_cast<int>(transform->position.x);
-	dest.y = static_cast<int>(transform->position.y);
+	dest.x = static_cast<int>(transform->position.x) - (isFixed? 0 : Game::camera.x);
+	dest.y = static_cast<int>(transform->position.y) - (isFixed ? 0 : Game::camera.y);
 	dest.w = transform->width * transform->scale;
 	dest.h = transform->height * transform->scale;
 }

@@ -31,7 +31,8 @@ void TileComponent::Initalise()
 
 void TileComponent::Update(float deltaTime)
 {
-	//TODO: update tile position based on camera control
+	dest.x = position.x - Game::camera.x;
+	dest.y = position.y - Game::camera.y;
 }
 
 void TileComponent::Render()

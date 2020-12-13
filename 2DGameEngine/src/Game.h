@@ -5,6 +5,7 @@
 
 class AssetManager;
 class Map;
+
 class Game
 {
 private:
@@ -16,6 +17,7 @@ public:
 	static SDL_Renderer* renderer;
 	static AssetManager* assetManager;
 	static SDL_Event event;
+	static SDL_Rect camera;
 	Map* map;
 	Game();
 	~Game();
@@ -27,6 +29,7 @@ public:
 	void Render();
 	void Destroy();
 
+	void HandleCameraMovement();
 	
 };
 

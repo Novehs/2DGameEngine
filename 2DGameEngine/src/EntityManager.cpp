@@ -46,7 +46,7 @@ std::vector<Entity*> EntityManager::getEntitiesByLayer(LayerType layer) const
     std::vector<Entity*> selectedEntities;
     for (auto& entity : entities)
     {
-        if (entity->layer = layer)
+        if (entity->layer == layer)
             selectedEntities.push_back(entity);
     }
 
