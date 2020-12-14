@@ -155,6 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\ColliderComponent.h" />
+    <ClInclude Include="src\Collision.h" />
     <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\Components\KeyboardControlComponent.h" />
     <ClInclude Include="src\Animation.h" />
@@ -558,6 +560,8 @@
     <None Include="libs\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\ColliderComponent.cpp" />
+    <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\Components\KeyboardControlComponent.cpp" />
     <ClCompile Include="src\Animation.cpp" />

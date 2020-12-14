@@ -16,8 +16,8 @@ TileComponent::TileComponent(int sourceX, int sourceY, int x, int y, int tileSiz
 	dest.w = tileSize * tileScale;
 	dest.h = tileSize * tileScale;
 
-	position.x = x;
-	position.y = y;
+	position.x = (float)x;
+	position.y = (float)y;
 }
 
 TileComponent::~TileComponent()
@@ -31,8 +31,8 @@ void TileComponent::Initalise()
 
 void TileComponent::Update(float deltaTime)
 {
-	dest.x = position.x - Game::camera.x;
-	dest.y = position.y - Game::camera.y;
+	dest.x = static_cast<int>(position.x) - Game::camera.x;
+	dest.y = static_cast<int>(position.y) - Game::camera.y;
 }
 
 void TileComponent::Render()

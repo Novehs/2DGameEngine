@@ -1,6 +1,8 @@
 #include "EntityManager.h"
 #include "Entity.h"
 #include "Constants.h"
+#include "Collision.h"
+#include "Components/ColliderComponent.h";
 
 void EntityManager::ClearData()
 {
@@ -65,4 +67,28 @@ void EntityManager::ListAllEntities() const
         std::cout << "Entity: " << entity->name << '\n';
         entity->ListAllComponents();
     }
+}
+
+std::string EntityManager::CheckEntityCollisions(Entity& entity) const
+{
+    ColliderComponent* collider;
+
+    if (entity.HasComponent<ColliderComponent>())
+        collider = entity.GetComponent<ColliderComponent>();
+    else
+        return std::string();
+
+    for (auto& ent : entities)
+    {
+        if (ent->name.compare(entity.name) != 0 && ent->HasComponent<ColliderComponent>())
+        {
+            ColliderComponent* other = ent->GetComponent<ColliderComponent>();
+
+            if (Collision::checkCollision(collider->collider, other->collider))
+                return other->colliderTag;
+        }
+    }
+
+    return std::string();
+
 }

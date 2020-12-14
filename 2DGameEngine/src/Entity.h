@@ -47,12 +47,7 @@ public:
 	template<typename T>
 	bool HasComponent() const
 	{
-		auto it = componentType.find(&typeid(T));
-		
-		if (it != componentType.end())
-			return true;
-		else
-			return false;
+		return componentType.count(&typeid(T));
 	}
 
 	void ListAllComponents() const;

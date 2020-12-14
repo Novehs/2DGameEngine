@@ -22,5 +22,6 @@ public:
 	unsigned int getEntityCount();
 
 	void ListAllEntities() const;
+	std::string CheckEntityCollisions(Entity& entity) const;
 };
 

@@ -3,6 +3,7 @@
 
 class TransformComponent;
 class SpriteComponent;
+class ColliderComponent;
 
 class KeyboardControlComponent : public Component
 {
@@ -14,11 +15,13 @@ public:
 	std::string rightKey;
 	std::string leftKey;
 	std::string shootKey;
+	std::string collisionKey;
+
 	TransformComponent* transform;
 	SpriteComponent* sprite;
-
+	ColliderComponent* collider;
 	KeyboardControlComponent();
-	KeyboardControlComponent(std::string up, std::string right, std::string down, std::string left, std::string shoot);
+	KeyboardControlComponent(std::string up, std::string right, std::string down, std::string left, std::string shoot, std::string collision);
 
 	std::string GetSDLKeyStringCode(std::string key);
 

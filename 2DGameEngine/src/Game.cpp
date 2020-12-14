@@ -8,6 +8,7 @@
 #include "Components/TransformComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Components/KeyboardControlComponent.h";
+#include "Components/ColliderComponent.h"
 #include "Map.h"
 
 EntityManager manager;
@@ -39,6 +40,7 @@ void Game::LoadLevel(int levelNumber)
 	assetManager->AddTexture("chopper", "./assets/images/chopper-spritesheet.png");
 	assetManager->AddTexture("radar", "./assets/images/radar-spritesheet.png");
 	assetManager->AddTexture("jungle", "./assets/tilemaps/jungle.png");
+	assetManager->AddTexture("collider", "./assets/images/collision-texture.png");
 	
 	map = new Map("jungle", 2, 32);
 	map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
@@ -46,11 +48,13 @@ void Game::LoadLevel(int levelNumber)
 	Entity& Player(manager.AddEntity("player", LayerType::PLAYER_LAYER));
 	Player.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
 	Player.AddComponent<SpriteComponent>("chopper", 2, 90, true, false);
-	Player.AddComponent<KeyboardControlComponent>("w", "d", "s", "a","space");
+	Player.AddComponent<KeyboardControlComponent>("w", "d", "s", "a","space", "c");
+	Player.AddComponent<ColliderComponent>("player", 240, 106, 32, 32, true);
 
 	Entity& Tank(manager.AddEntity("tank", LayerType::ENEMY_LAYER));	//call copy constructor
 	Tank.AddComponent<TransformComponent>(150, 235, 5, 0, 32, 32, 1);
 	Tank.AddComponent<SpriteComponent>("tank_right");
+	Tank.AddComponent<ColliderComponent>("tank", 150, 235, 32, 32, false);
 
 	Entity& Radar(manager.AddEntity("radar", LayerType::UI_LAYER));
 	Radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
@@ -78,7 +82,7 @@ void Game::Initalise(int width, int height)
 
 	if (!renderer)
 	{
-		std::cerr << "Failed to create SDL Renderer." << std::endl;
+		std::cerr << "Failed to create SDL Renderer" << std::endl;
 		return;
 	}
 
@@ -131,6 +135,8 @@ void Game::Update()
 		manager.Update(deltaTime);
 
 	HandleCameraMovement();
+
+	CheckCollisions();
 }
 
 void Game::Render()
@@ -168,8 +174,8 @@ void Game::HandleCameraMovement()
 		if (entity->name == "player")
 		{
 			playerTransform = entity->GetComponent<TransformComponent>();
-			camera.x = playerTransform->position.x - (WINDOW_WIDTH / 2);
-			camera.y = playerTransform->position.y - (WINDOW_HEIGHT / 2);
+			camera.x = static_cast<int>(playerTransform->position.x) - (WINDOW_WIDTH / 2);
+			camera.y = static_cast<int>(playerTransform->position.y) - (WINDOW_HEIGHT / 2);
 
 		}
 		else
@@ -184,5 +190,18 @@ void Game::HandleCameraMovement()
 	camera.x = camera.x > camera.w ? camera.w : camera.x;
 	camera.y = camera.y > camera.h ? camera.h : camera.y;
 
+
+}
+
+void Game::CheckCollisions()
+{
+	Entity player = *manager.getEntitiesByLayer(LayerType::PLAYER_LAYER)[0];
+	std::string collisionTagType = manager.CheckEntityCollisions(player);
+
+	if (collisionTagType.compare("tank") == 0)
+	{
+		std::cout << collisionTagType << '\n';
+		//isRunning = false;
+	}
 
 }
