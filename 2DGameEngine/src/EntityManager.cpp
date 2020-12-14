@@ -92,3 +92,34 @@ std::string EntityManager::CheckEntityCollisions(Entity& entity) const
     return std::string();
 
 }
+
+CollisionType EntityManager::CheckCollisions() const
+{
+    for (auto& entity : entities)
+    {
+        if (entity->HasComponent<ColliderComponent>())
+        {
+            ColliderComponent* collider = entity->GetComponent<ColliderComponent>();
+
+            for (auto& other : entities)
+            {
+                if (other->name.compare(entity->name) != 0 && other->HasComponent<ColliderComponent>())
+                {
+                    ColliderComponent* otherCollider = other->GetComponent<ColliderComponent>();
+
+                    if (Collision::checkCollision(collider->collider, otherCollider->collider))
+                    {
+                        if (collider->colliderTag.compare("player") == 0 && otherCollider->colliderTag.compare("tank") == 0)
+                            return CollisionType::PLAYER_ENEMY_COLLISION;
+                        if (collider->colliderTag.compare("player") == 0 && otherCollider->colliderTag.compare("projectile") == 0)
+                            return CollisionType::PLAYER_PROJECTILE_COLLISION;
+                        if (collider->colliderTag.compare("player") == 0 && otherCollider->colliderTag.compare("enemy_projectile") == 0)
+                            return CollisionType::ENEMY_PROJECTILE_COLLISION;
+                        if (collider->colliderTag.compare("player") == 0 && otherCollider->colliderTag.compare("flag") == 0)
+                            return CollisionType::PLAYER_LEVEL_COMPLETE_COLLISION;
+                    }
+                }
+            }
+        }
+    }
+}

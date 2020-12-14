@@ -41,7 +41,8 @@ void Game::LoadLevel(int levelNumber)
 	assetManager->AddTexture("radar", "./assets/images/radar-spritesheet.png");
 	assetManager->AddTexture("jungle", "./assets/tilemaps/jungle.png");
 	assetManager->AddTexture("collider", "./assets/images/collision-texture.png");
-	
+	assetManager->AddTexture("helipad", "./assets/images/base-landing.png");
+
 	map = new Map("jungle", 2, 32);
 	map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
@@ -52,14 +53,18 @@ void Game::LoadLevel(int levelNumber)
 	Player.AddComponent<ColliderComponent>("player", 240, 106, 32, 32, true);
 
 	Entity& Tank(manager.AddEntity("tank", LayerType::ENEMY_LAYER));	//call copy constructor
-	Tank.AddComponent<TransformComponent>(150, 235, 5, 0, 32, 32, 1);
+	Tank.AddComponent<TransformComponent>(150, 500, 5, 0, 32, 32, 1);
 	Tank.AddComponent<SpriteComponent>("tank_right");
-	Tank.AddComponent<ColliderComponent>("tank", 150, 235, 32, 32, false);
+	Tank.AddComponent<ColliderComponent>("tank", 150, 500, 32, 32, false);
 
 	Entity& Radar(manager.AddEntity("radar", LayerType::UI_LAYER));
 	Radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
 	Radar.AddComponent<SpriteComponent>("radar", 8, 150, false, true);
 
+	Entity& Flag = manager.AddEntity("flag", LayerType::LANDMARK_LAYER);
+	Flag.AddComponent<TransformComponent>(450, 400, 0, 0, 64, 64, 1);
+	Flag.AddComponent<SpriteComponent>("helipad");
+	Flag.AddComponent<ColliderComponent>("flag", 450, 400, 64, 64, false);
 }
 
 void Game::Initalise(int width, int height)
@@ -136,7 +141,7 @@ void Game::Update()
 
 	HandleCameraMovement();
 
-	CheckCollisions();
+	checkCollisions();
 }
 
 void Game::Render()
@@ -193,7 +198,7 @@ void Game::HandleCameraMovement()
 
 }
 
-void Game::CheckCollisions()
+void Game::CheckEntityCollisions()
 {
 	Entity player = *manager.getEntitiesByLayer(LayerType::PLAYER_LAYER)[0];
 	std::string collisionTagType = manager.CheckEntityCollisions(player);
@@ -204,4 +209,18 @@ void Game::CheckCollisions()
 		//isRunning = false;
 	}
 
+}
+
+void Game::checkCollisions()
+{
+	CollisionType collisionType = manager.CheckCollisions();
+
+	if (collisionType == CollisionType::PLAYER_ENEMY_COLLISION)
+		std::cout << "enemy collision\n";
+	if (collisionType == CollisionType::PLAYER_PROJECTILE_COLLISION)
+		std::cout << "player projectile collision\n";
+	if (collisionType == CollisionType::ENEMY_PROJECTILE_COLLISION)
+		std::cout << "enemy projectile collision\n";
+	if (collisionType == CollisionType::PLAYER_LEVEL_COMPLETE_COLLISION)
+		std::cout << "level completed collision\n";
 }
