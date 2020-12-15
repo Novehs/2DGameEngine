@@ -27,4 +27,4 @@ enum class CollisionType
 	PLAYER_LEVEL_COMPLETE_COLLISION
 };
 
-const unsigned int NUM_LAYERS = 6;
+const unsigned int NUM_LAYERS = 7;

@@ -9,6 +9,7 @@
 #include "Components/SpriteComponent.h"
 #include "Components/KeyboardControlComponent.h";
 #include "Components/ColliderComponent.h"
+#include "Components/TextLabelComponent.h"
 #include "Map.h"
 
 EntityManager manager;
@@ -43,6 +44,8 @@ void Game::LoadLevel(int levelNumber)
 	assetManager->AddTexture("collider", "./assets/images/collision-texture.png");
 	assetManager->AddTexture("helipad", "./assets/images/base-landing.png");
 
+	assetManager->AddFont("charriot-font", "./assets/fonts/charriot.ttf", 14);
+
 	map = new Map("jungle", 2, 32);
 	map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
@@ -65,6 +68,10 @@ void Game::LoadLevel(int levelNumber)
 	Flag.AddComponent<TransformComponent>(450, 400, 0, 0, 64, 64, 1);
 	Flag.AddComponent<SpriteComponent>("helipad");
 	Flag.AddComponent<ColliderComponent>("flag", 450, 400, 64, 64, false);
+
+	Entity& Label(manager.AddEntity("levelLabel", LayerType::UI_LAYER));
+	SDL_Color white = { 255,255,255,255 };
+	Label.AddComponent<TextLabelComponent>("First Level", 10, 10, "charriot-font", white);
 }
 
 void Game::Initalise(int width, int height)
@@ -74,6 +81,13 @@ void Game::Initalise(int width, int height)
 		std::cerr << "Error Initalising SDL." << std::endl;
 		return;
 	}
+
+	if (TTF_Init() != 0)
+	{
+		std::cerr << "Error initalising SDL TTF" << std::endl;
+		return;
+	}
+		
 
 	window = SDL_CreateWindow(nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_BORDERLESS);
 
