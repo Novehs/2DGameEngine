@@ -3,7 +3,7 @@
 #include "../AssetManager.h"
 #include "TransformComponent.h"
 
-SpriteComponent::SpriteComponent(const char* textureID) : spriteFlip(SDL_FLIP_NONE)
+SpriteComponent::SpriteComponent(std::string textureID) : spriteFlip(SDL_FLIP_NONE)
 {
 	isAnimated = false;
 	isFixed = false;

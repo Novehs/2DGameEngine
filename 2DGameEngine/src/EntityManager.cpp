@@ -12,8 +12,14 @@ void EntityManager::ClearData()
 
 void EntityManager::Update(float deltaTime)
 {
+    int i = 0;
     for (auto& entity : entities)
+    {
         entity->Update(deltaTime);
+        i++;
+        if (!entity->IsActive())
+            entities.erase(entities.begin() + i);
+    }
 }
 
 void EntityManager::Render()
@@ -58,6 +64,15 @@ std::vector<Entity*> EntityManager::getEntitiesByLayer(LayerType layer) const
 unsigned int EntityManager::getEntityCount()
 {
     return entities.size();
+}
+
+void EntityManager::DestroyInActiveEntities()
+{
+    for (int i = 0; i < entities.size(); i++)
+    {
+        if (!entities[i]->IsActive())
+            entities.erase(entities.begin() + i);
+    }
 }
 
 void EntityManager::ListAllEntities() const
@@ -113,7 +128,7 @@ CollisionType EntityManager::CheckCollisions() const
                             return CollisionType::PLAYER_ENEMY_COLLISION;
                         if (collider->colliderTag.compare("player") == 0 && otherCollider->colliderTag.compare("projectile") == 0)
                             return CollisionType::PLAYER_PROJECTILE_COLLISION;
-                        if (collider->colliderTag.compare("player") == 0 && otherCollider->colliderTag.compare("enemy_projectile") == 0)
+                        if (collider->colliderTag.compare("player") == 0 && otherCollider->colliderTag.compare("projectile") == 0)
                             return CollisionType::ENEMY_PROJECTILE_COLLISION;
                         if (collider->colliderTag.compare("player") == 0 && otherCollider->colliderTag.compare("flag") == 0)
                             return CollisionType::PLAYER_LEVEL_COMPLETE_COLLISION;

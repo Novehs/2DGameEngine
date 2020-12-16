@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include "../libs/sol/sol.hpp"
 
 class AssetManager;
 class Map;

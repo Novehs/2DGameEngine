@@ -1,118 +1,177 @@
-Level = {
-    ----------------------------------------------------
-    -- Table to define the list of assets
-    ----------------------------------------------------
+local currentSystemHour = os.date("*t").hour
+local mapTextureAssetId = "terrain-texture-day"
+
+if currentSystemHour > 9 and currentSystemHour < 18 then
+    mapTextureAssetId = "terrain-texture-day"
+else
+    mapTextureAssetId = "terrain-texture-night"
+end
+
+Level1 = {
     assets = {
-        [0] =
-        { type = "texture", id = "tilemap-texture", file = "./assets/tilemaps/jungle.png" },
-        { type = "texture", id = "chopper-texture", file = "./assets/images/chopper-spritesheet.png" },
-        { type = "texture", id = "takeoff-texture", file = "./assets/images/base-takeoff.png" },
-        { type = "texture", id = "tank-texture",    file = "./assets/images/tank-tiger-right.png" },
-        { type = "texture", id = "truck-texture",   file = "./assets/images/truck-ford-left.png" },
-        { type = "texture", id = "radar-texture",   file = "./assets/images/radar-spritesheet.png" },
-        { type = "texture", id = "bullet-texture",  file = "./assets/images/bullet.png" },
-        { type = "font"   , id = "pico-font-5",     file = "./assets/fonts/pico.ttf", font_size = 5 },
-        { type = "font"   , id = "pico-font-10",    file = "./assets/fonts/pico.ttf", font_size = 10 }
+        [0] = { type="texture", id = "terrain-texture-day", file = "./assets/tilemaps/jungle.png" },
+        [1] = { type="texture", id = "terrain-texture-night", file = "./assets/tilemaps/jungle-night.png" },
+        [2] = { type="texture", id = "chopper-texture", file = "./assets/images/chopper-spritesheet.png" },
+        [3] = { type="texture", id = "tank-texture-riger-right", file = "./assets/images/tank-tiger-right.png" },
+        [4] = { type="texture", id = "projectile-texture", file = "./assets/images/bullet.png" },
+        [5] = { type="texture", id = "heliport-texture", file = "./assets/images/base-landing.png"},
+        [6] = { type="texture", id = "radar-texture", file = "./assets/images/radar-spritesheet.png"},
+        [7] = { type="font", id = "charriot-font", file = "./assets/fonts/charriot.ttf", fontSize = 14 }
     },
 
-    ----------------------------------------------------
-    -- table to define the map config variables
-    ----------------------------------------------------
-    tilemap = {
-        map_file = "./assets/tilemaps/jungle.map",
-        texture_asset_id = "tilemap-texture",
-        num_rows = 20,
-        num_cols = 25,
-        tile_size = 32,
-        scale = 2.0
+    map = {
+        textureAssetId = mapTextureAssetId,
+        file = "./assets/tilemaps/jungle.map",
+        scale = 2,
+        tileSize = 32,
+        mapSizeX = 25,
+        mapSizeY = 20
     },
-
-    ----------------------------------------------------
-    -- table to define entities and their components
-    ----------------------------------------------------
     entities = {
-        [0] =
-        {
-            -- Player
-            tag = "player",
+        [0] = {
+            name = "player",
+            layer = 4,
             components = {
                 transform = {
-                    position = { x = 240, y = 108 },
-                    scale = { x = 1.0, y = 1.0 },
-                    rotation = 0.0, -- deg
-                },
-                rigidbody = {
-                    velocity = { x = 0.0, y = 0.0 }
-                },
-                sprite = {
-                    texture_asset_id = "chopper-texture",
+                    position = {
+                        x = 240,
+                        y = 106
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
                     width = 32,
                     height = 32,
-                    z_index = 5
+                    scale = 1
                 },
-                animation = {
-                    num_frames = 2,
-                    speed_rate = 10 -- fps
+                sprite = {
+                    textureAssetId = "chopper-texture",
+                    animated = true,
+                    frameCount = 2,
+                    animationSpeed = 90,
+                    hasDirection = true,
+                    fixed = false
                 },
-                boxcollider = {
-                    offset = { x = 0, y = 5 },
-                    width = 32,
-                    height = 25
+                collider = {
+                    tag = "player",
+                    draw = true
                 },
-                health = {
-                    health_percentage = 100
-                },
-                projectile_emitter = {
-                    projectile_velocity = { x = 100, y = 100 },
-                    projectile_duration = 10000, -- millisecs
-                    repeat_frequency = 0, -- millisecs
-                    hit_percentage_damage = 10,
-                    friendly = true
-                },
-                keyboard_controller = {
-                    up_velocity = { x = 0, y = -50 },
-                    right_velocity = { x = 50, y = 0 },
-                    down_velocity = { x = 0, y = 50 },
-                    left_velocity = { x = -50, y = 0 }
-                },
-                camera_follow = {
-                    follow = true
+                input = {
+                    keyboard = {
+                        up = "w",
+                        left = "a",
+                        down = "s",
+                        right = "d",
+                        shoot = "space",
+                        box = "c"
+                    }
                 }
             }
         },
-        {
-            -- Tank
-            group = "enemies",
+
+        [1] = {
+            name = "tank-enemy-1",
+            layer = 3,
             components = {
                 transform = {
-                    position = { x = 800, y = 150 },
-                    scale = { x = 1.0, y = 1.0 },
-                    rotation = 0.0, -- deg
-                },
-                rigidbody = {
-                    velocity = { x = 5.0, y = 0.0 }
-                },
-                sprite = {
-                    texture_asset_id = "tank-texture",
+                    position = {
+                        x = 150,
+                        y = 500
+                    },
+                    velocity = 
+                    {
+                        x = 0,
+                        y = 0
+                    },
                     width = 32,
                     height = 32,
-                    z_index = 2
+                    scale = 1
                 },
-                boxcollider = {
-                    offset = { x = 0, y = 10 },
-                    width = 25,
-                    height = 15
+                sprite = {
+                    textureAssetId = "tank-texture-riger-right",
+                    animated = false
                 },
-                health = {
-                    health_percentage = 100
+                collider = {
+                    tag = "tank",
+                    draw = false
                 },
-                projectile_emitter = {
-                    projectile_velocity = { x = 100, y = 0 },
-                    projectile_duration = 10000, -- millisecs
-                    repeat_frequency = 3000, -- millisecs
-                    hit_percentage_damage = 20,
-                    friendly = false
+                projectileEmitter = {
+                    textureAssetId = "projectile-texture",
+                    width = 4,
+                    height = 4,
+                    speed = 50,
+                    range = 200,
+                    angle = 0,
+                    shouldLoop = true,
+                    scale = 1
+                }
+            }  
+        },
+
+        [2] = {
+            name = "heliport",
+            layer = 2,
+            components = {
+                transform = {
+                    position = {
+                        x = 450,
+                        y = 400
+                    },
+                    velocity = 
+                    {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 64,
+                    height = 64,
+                    scale = 1,
                 },
+
+                sprite = {
+                    textureAssetId = "heliport-texture",
+                    animated = false;
+                },
+                collider = {
+                    tag = "flag",
+                    draw = false
+                }
+            }
+        },
+
+        [3] = 
+        {
+            name = "radar",
+            layer = 6,
+            components = 
+            {
+                transform = 
+                {
+                    position = 
+                    {
+                        x = 720,
+                        y = 15
+                    },
+                    velocity = 
+                    {
+                        x = 0,
+                        y = 0
+                    },
+
+                    width = 64,
+                    height = 64,
+                    scale = 1,
+                },
+
+                sprite = 
+                {
+                    textureAssetId = "radar-texture",
+                    animated = true,
+                    frameCount = 8,
+                    animationSpeed = 150,
+                    hasDirection = false,
+                    fixed = true
+                }
             }
         }
     }

@@ -24,7 +24,7 @@ private:
 
 public:
 
-	SpriteComponent(const char* textureID);
+	SpriteComponent(std::string textureID);
 	SpriteComponent(std::string textureID, int numFrames, int animationSpeed, bool hasDirection, bool isFixed);
 
 	void Play(std::string animationName);
